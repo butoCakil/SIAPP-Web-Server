@@ -487,7 +487,7 @@ if ($nokartu) {
                                             );
                                             mysqli_stmt_execute($stmt);
 
-                                            $pesan = "BMPE";
+                                            $pesan = "BPEB";
                                         } else {
                                             $pesan = "545";
                                         }
@@ -512,12 +512,12 @@ if ($nokartu) {
                                             );
                                             mysqli_stmt_execute($stmt);
 
-                                            $pesan = "BMPE";
+                                            $pesan = "BPSE";
                                         } else {
                                             $pesan = "555";
                                         }
                                     } else {
-                                        $pesan = "515";
+                                        $pesan = "510";
                                     }
                                 }
                             } else {
@@ -564,7 +564,7 @@ if ($nokartu) {
                             );
                             mysqli_stmt_execute($stmt);
 
-                            $pesan = "BMPE";
+                            $pesan = "BMIJ";
                         } else {
                             $pesan = "505";
                         }
@@ -667,7 +667,7 @@ $info_kode_array = array(
     "406" => "ERROR! CHIP TIDAK TERDAFTAR",
     "407" => "ERROR! DEVICE TIDAK SESUAI",
     "505" => "ERROR! DATABASE SERVER: " . mysqli_error($konek),
-    "515" => "ERROR! BATAS WAKTU " . $selisih_waktu,
+    "510" =>  @$nama . ": TELAH TERCATAT! " . $selisih_waktu . " dtk lalu",
     "545" => "ERROR! DATABASE SERVER INSERT: " . mysqli_error($konek),
     "555" => "ERROR! DATABASE SERVER UPDTAE: " . mysqli_error($konek),
     "IDTT" => "$sub_pesan, Kartu ID ini belum terdaftar",
@@ -681,8 +681,11 @@ $info_kode_array = array(
     "MMMM" => @$nama . ", " . @$keterangan,
     "BMPM" => @$nama . ", " . "Berhasil melakukan Presensi",
     "PKBD" => @$nama . ", " . "Berhasil melakukan Presensi Kelas: " . @$jadwal_ruangan,
-    "BMPE" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan",
-    "TAKS" => @$nama . ", " . "Tidak Ada KBM di Kelas: " . @$hasil_info_device
+    "BMPE" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Mulai]",
+    "BPSE" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Selesai]",
+    "BPEB" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Mulai - Baru]",
+    "TAKS" => @$nama . ", " . "Tidak Ada KBM di Kelas: " . @$hasil_info_device,
+    "BMIJ" => @$nama . ", " . "Berhasil melakukan Ijin",
 );
 
 // beri feedback

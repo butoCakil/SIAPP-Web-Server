@@ -249,7 +249,6 @@
                         </div>
                     </div>
 
-
                     <style>
                         #tabel_dataguru_admin {
                             max-height: 350px;
@@ -259,8 +258,7 @@
                     <div class="card elevation-5">
                         <div class="card-header bg-gradient-navy">
                             <h3 class="card-title">
-                                <i class="fas fa-user-cog"></i></i>&nbsp;
-                                Set Admin
+                                <i class="fas fa-user-cog"></i></i>&nbsp;Set Admin
                             </h3>
                             <div class="card-tools">
                                 <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Mengubah Setting Aplikasi, dan mengatur Admin"></i>
@@ -277,11 +275,111 @@
                                 <?php include('app/dataguru.php'); ?>
                             </div>
                         </div>
-                    <?php } ?>
                     </div>
+
+
+                    <div class="card elevation-5">
+                        <div class="card-header bg-gradient-navy">
+                            <h3 class="card-title">
+                                <i class="fas fa-user-cog"></i></i>&nbsp;Export Database
+                            </h3>
+                            <div class="card-tools">
+                                <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Mengubah Setting Aplikasi, dan mengatur Admin"></i>
+                                <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <!-- <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button> -->
+                            </div>
+                        </div>
+                        <div id="bodiexdb" class="card-body">
+                            <div class="row mb-3">
+                                <button id="tambahbarisexdb" class="btn btn-light shadow bg-gradient-success border-0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Entry
+                                </button>
+                            </div>
+
+                            <?php
+                            // Daftar tabel yang ingin Anda tampilkan
+                            $tablesToDisplay = array(
+                                "daftarruang",
+                                "daftarijin",
+                                "dataguru",
+                                "datapresensi",
+                                "datasiswa",
+                                "jadwalgurujur",
+                                "jadwalkbm",
+                                "jampelajaran",
+                                "jurnalguru",
+                                "kalender",
+                                "kelompokkelas",
+                                "kodeinfo",
+                                "pengumuman",
+                                "presensikelas",
+                                "presensiEvent",
+                            );
+
+                            // ambil data dari tabel `exportdb`
+                            $query = "SELECT * FROM exportdb WHERE `status` = 'diijinkan'";
+                            $result = mysqli_query($konek, $query);
+
+                            if ($result) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $dblink_id = $row['id'];
+                                    $dblink_db = $row['db'];
+                                    $dblink_link = $row['link'];
+                                    $dblink_keyapi = @$row['keyapi'];
+                            ?>
+                                    <div class="row" id="exdb<?= $dblink_id ? "_$dblink_id" : ""; ?>">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col-3">
+                                                <?php
+                                                // Query untuk mendapatkan daftar tabel yang sesuai dengan kriteria
+                                                $queryTables = "SHOW TABLES LIKE '%'";
+                                                $resultTables = mysqli_query($konek, $queryTables);
+
+                                                if ($resultTables) {
+                                                    echo '<select id="pilihexdb_' . $dblink_id . '" class="form-select" aria-label="Default select example">';
+                                                    echo "<option value=\"\">-- Pilih Tabel --</option>";
+                                                    while ($rowTables = mysqli_fetch_row($resultTables)) {
+                                                        $tableName = $rowTables[0];
+                                                        $selected = (strtolower($dblink_db) == strtolower($tableName)) ? "selected" : "";
+                                                        echo "<option value=\"$tableName\" $selected>$tableName</option>";
+                                                    }
+                                                    echo '</select>';
+                                                } else {
+                                                    echo "Tidak dapat mengeksekusi query: " . mysqli_error($konek);
+                                                }
+
+                                                ?>
+                                            </div>
+                                            <div class="col-8 mb-3">
+                                                <textarea id="exdbarea_<?= $dblink_id; ?>" class="form-control" name="linkexdb" rows="1" placeholder="link"><?= $dblink_link ?></textarea>
+                                                <div class="password-input d-flex">
+                                                    <input type="password" id="apitexdbarea_<?= $dblink_id; ?>" class="form-control" name="keyexdb" value="<?= $dblink_keyapi ?>" data-id="<?= $dblink_id; ?>" placeholder="Key">
+                                                    <button class="btn btn-secondary show-hide-button" data-id="<?= $dblink_id; ?>"><i class="fa fa-eye"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 col-1 d-flex flex-column gap-1">
+                                                <div id="btnokexdb<?= $dblink_id ? "_$dblink_id" : ""; ?>">
+                                                    <button class="btn btn-primary border-0" onclick="inputlink('<?= $dblink_id ? $dblink_id : 0; ?>');"><i class="fa fa-check"></i></button>
+                                                </div>
+                                                <div id="btncancelexdb<?= $dblink_id ? "_$dblink_id" : ""; ?>">
+                                                    <button class="btn btn-danger border-0" onclick="deletelink('<?= $dblink_id; ?>');"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <?php
+                                }
+                            }
+                            ?>
+
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
-
     </div>
 </section>
 
@@ -324,7 +422,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="kontak" class="form-label">CP</label>
-                        <input type="tel" class="form-control" id="kontak" placeholder="No. tlp/ WA: 628XXXXXXXXXX" name="kontakadmin">
+                        <input type="tel" class="form-control" id="kontak" placeholder="No. tlp/ WA: 628xxxxxxxxxx" name="kontakadmin">
                     </div>
 
             </div>
@@ -498,4 +596,176 @@
                                                                     </svg>`;
         }
     }
+
+    // Export db
+    function tambahBaris() {
+        // Mendapatkan elemen dengan ID yang sesuai, misal "exdb_1"
+        var lastRow = document.querySelector('[id^="exdb_"]:last-child');
+        var newRow = lastRow.cloneNode(true);
+
+        document.getElementById("bodiexdb").appendChild(newRow);
+
+        // Mengganti ID dan value
+        var newRowId = newRow.id;
+        var newRowNumber = parseInt(newRowId.split("_")[1]) + 1;
+        newRow.id = "exdb_" + newRowNumber;
+
+        // Mengganti ID dan mengosongkan nilai untuk select
+        var select = newRow.querySelector("#pilihexdb_" + (newRowNumber - 1));
+        select.id = "pilihexdb_" + newRowNumber;
+        select.value = "";
+
+        // Mengosongkan nilai pada textarea
+        var textarea = newRow.querySelector("#exdbarea_" + (newRowNumber - 1));
+        textarea.id = "exdbarea_" + newRowNumber;
+        textarea.value = "";
+
+        // Mengosongkan nilai pada textarea
+        var textarea = newRow.querySelector("#apitexdbarea_" + (newRowNumber - 1));
+        textarea.id = "apitexdbarea_" + newRowNumber;
+        textarea.value = "";
+
+        // Mengganti ID tombol ok
+        var okButton = newRow.querySelector("#btnokexdb_" + (newRowNumber - 1));
+        okButton.id = "btnokexdb_" + newRowNumber;
+        okButton.innerHTML = '<button class="btn btn-primary border-0" onclick="inputlink(' + newRowNumber + ');"><i class="fa fa-check "></i></button>';
+
+        // Tambahkan event listener untuk tombol "OK"
+        // okButton.querySelector('button').addEventListener('click', function() {
+        //     inputlink(newRowNumber);
+        // });
+
+        // Mengganti ID tombol times
+        deleteBtn = newRow.querySelector("#btncancelexdb_" + (newRowNumber - 1));
+        deleteBtn.id = "btncancelexdb_" + newRowNumber;
+        deleteBtn.innerHTML = '<button class="btn btn-danger border-0" onclick="deletelink(' + newRowNumber + ');"><i class="fa fa-times "></i></button>';
+
+        // Sembunyikan tombol "times" di baris baru
+        var tombolTimes = newRow.querySelector('#btncancelexdb_' + newRowNumber);
+        tombolTimes.style.display = "block"; // Tampilkan tombol "times" di baris tambahan
+
+        // Tambahkan event listener untuk tombol "times"
+        tombolTimes.addEventListener("click", function() {
+            // Cari parent terdekat dengan class "row" dan hapusnya
+            var parentRow = this.closest('.row');
+            if (parentRow) {
+                parentRow.remove();
+            }
+        });
+    }
+
+    // Menambahkan event listener untuk tombol "plus"
+    document.getElementById("tambahbarisexdb").addEventListener("click", tambahBaris);
+
+    // Sembunyikan tombol "times" di baris pertama
+    var tombolTimesPertama = document.querySelector('[id^="btncancelexdb_"]');
+    if (tombolTimesPertama) {
+        tombolTimesPertama.style.display = "none";
+    }
+
+
+    // var lastRow = document.querySelector('[id^="exdb_"]:last-child');
+
+    // // Tambahkan event listener untuk tombol "times" di baris pertama
+    // lastRow.addEventListener("click", function() {
+    //     // Cari parent terdekat dengan class "row" dan hapusnya
+    //     var parentRow = this.closest('.row');
+    //     if (parentRow) {
+    //         parentRow.remove();
+    //     }
+    // });
+
+    // operasi ajax ke DB
+
+    function inputlink(db_id) {
+        // Dapatkan nilai select dan textarea
+        var selectValue = $("#exdb_" + db_id + " #pilihexdb_" + db_id).val();
+        var textareaValue = $("#exdb_" + db_id + " #exdbarea_" + db_id).val();
+        var keyAreaValue = $("#exdb_" + db_id + " #apitexdbarea_" + db_id).val();
+
+        $.ajax({
+            url: "app/linkexdb.php",
+            type: "POST",
+            data: {
+                set: "inputlink",
+                id_db: db_id,
+                select_value: selectValue,
+                textarea_value: textareaValue,
+                apikey: keyAreaValue,
+                key: '$1-9(SiApp)'
+            },
+            success: function(data) {
+                var okButton = document.getElementById("btnokexdb_" + db_id);
+                okButton.innerHTML = '';
+                okButton.innerHTML = '<button id="btnokexdb_' + db_id + '" class="btn btn-success border-0" onclick="inputlink("' + (db_id) + '");"><i class="fa fa-check"></i></button>';
+
+                alert(data);
+                okButton.querySelector('button').addEventListener('click', function() {
+                    inputlink(db_id);
+                });
+            },
+            error: function() {
+                alert('ERROR! ' + data);
+            }
+        });
+    }
+
+    function deletelink(db_id) {
+        if (!confirm("link export DB akan dihapus")) {
+            return;
+        }
+
+        $.ajax({
+            url: "app/linkexdb.php",
+            type: "POST",
+            data: {
+                set: "deletelink",
+                id_db: db_id,
+                key: '$1-9(SiApp)'
+            },
+            success: function(data) {
+                alert(data);
+            },
+            error: function() {
+                alert('ERROR! ' + data);
+            }
+        });
+
+        var pilihRow = document.getElementById("exdb_" + db_id);
+
+        // Tambahkan event listener untuk tombol "times" di baris pertama
+        pilihRow.addEventListener("click", function() {
+            // Cari parent terdekat dengan class "row" dan hapusnya
+            var parentRow = this.closest('.row');
+            if (parentRow) {
+                parentRow.remove();
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Temukan semua elemen dengan class "password-input"
+        var passwordInputs = document.querySelectorAll(".password-input");
+
+        // Iterasi melalui setiap elemen
+        passwordInputs.forEach(function(passwordInput) {
+            // Temukan input dan tombol dalam setiap elemen
+            var input = passwordInput.querySelector("input");
+            var showHideButton = passwordInput.querySelector(".show-hide-button");
+
+            // Setel awalnya input adalah type="password"
+            input.type = "password";
+
+            // Tambahkan event listener ke tombol "Tampilkan"
+            showHideButton.addEventListener("click", function() {
+                if (input.type === "password") {
+                    input.type = "text"; // Jika saat ini tipe adalah "password", ubah menjadi "text" untuk menampilkan karakter
+                    showHideButton.innerHTML = '<i class="fa fa-eye-slash"></i>';
+                } else {
+                    input.type = "password"; // Jika saat ini tipe adalah "text", ubah kembali menjadi "password" untuk menyembunyikan karakter
+                    showHideButton.innerHTML = '<i class="fa fa-eye"></i>';
+                }
+            });
+        });
+    });
 </script>
