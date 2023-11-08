@@ -879,6 +879,33 @@ if ($nokartu) {
 }
 
 // beri feedback
+$info_kode_array = array(
+    "404" => "ERROR! Method Not Allowed.",
+    "405" => "ERROR! REQ TIDAK DI IJINKAN",
+    "406" => "ERROR! CHIP TIDAK TERDAFTAR",
+    "407" => "ERROR! DEVICE TIDAK SESUAI",
+    "505" => "ERROR! DATABASE SERVER: " . mysqli_error($konek),
+    "510" =>  @$nama . ": TELAH TERCATAT! " . $selisih_waktu . " dtk lalu",
+    "545" => "ERROR! DATABASE SERVER INSERT: " . mysqli_error($konek),
+    "555" => "ERROR! DATABASE SERVER UPDTAE: " . mysqli_error($konek),
+    "IDTT" => "$sub_pesan, Kartu ID ini belum terdaftar",
+    "HLTM" => @$nama . ", " . "Hari ini Libur",
+    "TBPS" => @$nama . ", " . "Tidak bisa melakukan presensi sekarang.",
+    "SAPP" => @$nama . ", " . "Sudah melakukan presensi pulang",
+    "PLAW" => @$nama . ", " . "Pulang lebih awal",
+    "PPBH" => @$nama . ", " . "Presensi Pulang berhasil",
+    "PPPP" => @$nama . ", " . @$keterangan,
+    "SMPM" => @$nama . ", " . "Anda Sudah melakukan Presensi",
+    "MMMM" => @$nama . ", " . @$keterangan,
+    "BMPM" => @$nama . ", " . "Berhasil melakukan Presensi",
+    "PKBD" => @$nama . ", " . "Berhasil melakukan Presensi Kelas: " . @$jadwal_ruangan,
+    "TAKS" => @$nama . ", " . "Tidak Ada KBM di Kelas: " . @$hasil_info_device,
+    "BMPE" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Mulai]",
+    "BPSE" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Selesai]",
+    "BPEB" => @$nama . ", " . "Berhasil melakukan Presensi Kegiatan [Mulai - Baru]",
+    "BMIJ" => @$nama . ", " . "Berhasil melakukan Ijin",
+);
+
 $array = array(
     "0" => array(
         "id" => "$idchip_clean",
@@ -968,9 +995,10 @@ if (mysqli_stmt_prepare($stmt, "SELECT * FROM tempreq WHERE timestamp = ? AND ip
     // Tutup prepared statement
     mysqli_stmt_close($stmt);
 }
-$pesan = "";
 
 mysqli_close($konek);
+
+$pesan = "";
 
 // <!-- function -->
 // fungsi menghitung selisih waktu terlambat, waktu sekarang dengan waktu masuk dan pulang
